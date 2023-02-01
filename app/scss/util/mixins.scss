@@ -17,6 +17,10 @@
         .postedAt {
             color: var(--grey-blue);
         }
+
+        .you {
+            background-color: var(--mod-blue);
+        }
     }
 
     &__comment {
@@ -33,6 +37,11 @@
                 -webkit-text-stroke: .1rem;
                 color: var(--light-grey-blue);
                 cursor: pointer;
+                @include transition(color);
+
+                &:hover {
+                    color: var(--mod-blue);
+                }
             }
 
             .count {
@@ -42,6 +51,14 @@
 
         .replyBtn {
             color: var(--mod-blue);
+        }
+
+        .crudBtns {
+            color: var(--mod-blue);
+
+            .edit, .delete {
+                @include hoverEffect;
+            }
         }
     }
 }
