@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend Mentor | Interactive comments section</title>
+
+
+  <!-- custom stylesheet + script -->
+  <link rel="stylesheet" href="/dist/style.css">
+  <script defer src="/dist/script.js"></script>
+
+  <!-- favicon img -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+
+  <!-- bootstrap icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+  <!-- google font CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+  <section class="allCommentCtn">
+
+    <section class="commentSection">
+      <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4">
+        <div class="commentCard__header flex items-center gap-x-4 pb-4">
+          <img class="w-10" src="/images/avatars/image-amyrobson.png" alt="">
+          <p class="username font-semibold">amyrobson</p>
+          <p class="postedAt font-medium">1 month ago</p>
+        </div>
+        <p class="commentCard__comment">
+          Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.
+        </p>
+        <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
+          <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
+            <i class="bi bi-plus"></i>
+            <span class="count">12</span>
+            <i class="bi bi-dash"></i>
+          </div>
+          <div class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
+            <i class="bi bi-reply-fill"></i>
+            <p>Reply</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="commentSection">
+      <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4">
+        <div class="commentCard__header flex items-center gap-x-4 pb-4">
+          <img class="w-10" src="/images/avatars/image-amyrobson.png" alt="">
+          <p class="username font-semibold">amyrobson</p>
+          <p class="postedAt font-medium">1 month ago</p>
+        </div>
+        <p class="commentCard__comment">
+          Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.
+        </p>
+        <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
+          <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
+            <i class="bi bi-plus"></i>
+            <span class="count">12</span>
+            <i class="bi bi-dash"></i>
+          </div>
+          <div class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
+            <i class="bi bi-reply-fill"></i>
+            <p>Reply</p>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="replyCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 w-[95%] lg:w-[88%]">
+        <span id="line" class="block absolute h-[10rem] w-[1.3px] left-[-.7rem] lg:left-[-3rem] bg-slate-300"></span>
+        <div class="replyCard__header flex items-center gap-x-4 pb-4">
+          <img class="w-10" src="/images/avatars/image-amyrobson.png" alt="">
+          <p class="username font-semibold">amyrobson</p>
+          <p class="postedAt font-medium">1 month ago</p>
+        </div>
+        <p class="replyCard__comment">
+          Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.
+        </p>
+        <div class="replyCard__footer flex items-center justify-between mt-5 lg:block">
+          <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
+            <i class="bi bi-plus"></i>
+            <span class="count">12</span>
+            <i class="bi bi-dash"></i>
+          </div>
+          <div class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
+            <i class="bi bi-reply-fill"></i>
+            <p>Reply</p>
+          </div>
+        </div>
+      </div>
+      
+    </section>
+
+  </section>
+
+  <section class="addComment mt-5 mb-5">
+    <div class="addCommentCard bg-white px-5 lg:pr-4 rounded-xl flex flex-col lg:justify-end lg:flex-row gap-x-5 relative lg:pb-6 lg:pt-4">
+      <textarea name="comment" id="comment" cols="30" rows="2" class="w-full p-4 mt-5 lg:mt-4 rounded-lg lg:w-[75%]" placeholder="Add a comment..."></textarea>
+      <div class="footer flex justify-between items-center lg:block py-3">
+        <img class="w-10 lg:absolute left-5 top-8" src="./images/avatars/image-maxblagun.png" alt="">
+        <button type="button" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium">SEND</button>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>

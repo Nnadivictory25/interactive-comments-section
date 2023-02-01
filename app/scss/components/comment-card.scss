@@ -1,0 +1,57 @@
+@use '../util/breakpoints.scss' as *;
+@use '../util/functions.scss' as *;
+@use '../util/mixins.scss' as *;
+
+.allCommentCtn {
+    width: min(92%, rem(750));
+    margin-inline: auto;
+    // outline: 1px solid black;
+
+    .commentSection {
+        width: 100%;
+        margin-top: 1.5rem;
+
+        &:first-child {
+            margin-top: 2.5rem;
+        }
+    
+        .commentCard {
+            @include cardStyles;
+        }
+
+        .replyCard {
+            margin-top: 1.5rem;
+            @include cardStyles(true);
+        }
+    }
+}
+
+.addComment {
+    width: min(92%, rem(750));
+    margin-inline: auto;
+
+    .addCommentCard {
+        width: 100%;
+
+        textarea {
+            outline: 2px solid var(--light-grey);
+            @include transition(outline);
+            
+            &:hover, &:focus {
+                outline: 2px solid (var(--mod-blue));
+            }
+        }
+
+        .footer {
+
+            button {
+                background-color: var(--mod-blue);
+                @include hoverEffect;
+            }
+        }
+    }
+}
+
+.replyBtn {
+    @include hoverEffect;
+}

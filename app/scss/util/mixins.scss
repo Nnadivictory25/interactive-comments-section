@@ -1,0 +1,55 @@
+@use '../util/breakpoints.scss' as *;
+@use '../util/functions.scss' as *;
+
+// This is where mixins will be created . 
+
+@mixin transition($prop: all) {
+    transition: $prop .2s ease-in-out !important;
+}
+
+@mixin cardStyles($reply: false) {
+    @if $reply {
+        margin-left: auto;
+    }
+
+    &__header {
+    
+        .postedAt {
+            color: var(--grey-blue);
+        }
+    }
+
+    &__comment {
+        color: var(--grey-blue);
+    }
+
+    &__footer {
+
+        .score {
+            background-color: var(--light-grey);
+
+            i {
+                font-weight: 700 !important;
+                -webkit-text-stroke: .1rem;
+                color: var(--light-grey-blue);
+                cursor: pointer;
+            }
+
+            .count {
+                color: var(--mod-blue);
+            }
+        }
+
+        .replyBtn {
+            color: var(--mod-blue);
+        }
+    }
+}
+
+@mixin hoverEffect {
+    @include transition(opacity);
+
+    &:hover {
+        opacity: .7;
+    }
+}
