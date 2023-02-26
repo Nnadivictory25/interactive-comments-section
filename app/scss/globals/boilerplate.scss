@@ -14,4 +14,8 @@ body {
     padding: 0;
     font-family: var(--pri-font);
     background-color: var(--light-grey);
+
+    &.no-scroll {
+        overflow: hidden !important;
+    }
 }

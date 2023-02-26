@@ -1,0 +1,98 @@
+@use '../util/breakpoints.scss' as *;
+@use '../util/functions.scss' as *;
+@use '../util/mixins.scss' as *;
+
+
+.overlay {
+    height: 100vh !important;
+    width: 100vw !important;
+    inset: 0;
+    opacity: .3;
+}
+
+.modal {
+    width: min(95%, rem(380));
+    height: auto;
+    overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(0%, -50%);
+    
+    p {
+        color: var(--grey-blue);
+    }
+
+    input {
+        @include transition(outline-color);
+
+        &:focus {
+            outline: 1px solid var(--blue);
+        }
+    }
+
+    button {
+        @include transition(opacity);
+        color: #fff;
+        width: 45%;
+
+
+        &:hover {
+            opacity: .7;
+        }
+
+        &.cancel {
+            background-color: var(--grey-blue);
+        }
+
+        &.yes {
+            background-color: var(--soft-red);
+        }
+    }
+}
+
+.overlay,
+.modal {
+    display: none;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    100% {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    100% {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+/* CSS for the element to be animated */
+.hasFade {
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+}
+
+.fade-in {
+    animation-name: fadeIn;
+}
+
+.fade-out {
+    animation-name: fadeOut;
+}
+
+.overlay {
+    opacity: .3 !important ;
+}

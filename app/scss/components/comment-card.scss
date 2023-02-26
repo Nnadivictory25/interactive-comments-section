@@ -24,6 +24,24 @@
             @include cardStyles(true);
         }
     }
+    
+    .replyBtn {
+        @include hoverEffect;
+    }
+    
+    button {
+        background-color: var(--mod-blue) !important;
+        @include hoverEffect;
+    }
+    
+    textarea {
+        outline: 2px solid var(--light-grey);
+        @include transition(outline);
+        
+        &:hover, &:focus {
+            outline: 2px solid (var(--mod-blue)); 
+        }
+    }
 }
 
 .addComment {
@@ -52,20 +70,6 @@
     }
 }
 
-.replyBtn {
-    @include hoverEffect;
-}
-
-button {
-    background-color: var(--mod-blue) !important;
-    @include hoverEffect;
-}
-
-textarea {
-    outline: 2px solid var(--light-grey);
-    @include transition(outline);
-    
-    &:hover, &:focus {
-        outline: 2px solid (var(--mod-blue)); 
-    }
+.replyTo {
+    color: var(--mod-blue);
 }
