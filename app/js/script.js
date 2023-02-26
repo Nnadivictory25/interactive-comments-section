@@ -98,17 +98,10 @@ const renderComments = () => {
 };
 
 const renderReplies = (data, commentIndex) => {
+
   let html = "";
-  let element1;
-  let element2;
-  let spaceBetweenElements;
-  getSpaceBetweenElements(commentIndex);
-
-  //   const spaceBetweenElements = element2.offsetTop - (element1.offsetTop + element1.offsetHeight);
-
-  //   console.log(spaceBetweenElements);
-
   if (data.length > 0) {
+    getSpaceBetweenElements(commentIndex);
     data.forEach((reply, i) => {
       const { content, createdAt, replyingTo, score, user } = reply;
 
@@ -117,7 +110,7 @@ const renderReplies = (data, commentIndex) => {
                     ${
                       i === 0
                         ? /*html*/ `
-                    <span id="line" class="block absolute h-[26rem] top-0 w-[1.3px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+                    <span id="line" class="block absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
                     `
                         : ""
                     }
@@ -150,13 +143,19 @@ const renderReplies = (data, commentIndex) => {
 
 
 const getSpaceBetweenElements = (commentIndex) => {
-    element1 = document.getElementById(`${commentIndex}`);
-    console.log(element1);
-    if (commentIndex !== commentData.comments.length - 1) {
-      element2 = element1.nextElementSibling;
-    } else {
-      element2 = document.querySelector(".addComment");
-    }
-    let spaceBetweenElements = element2.offsetTop - (element1.offsetTop + element1.offsetHeight)
-    console.log(element1, element2, spaceBetweenElements);
+    let element1;
+    let element2;
+    let spaceBetweenElements;
+
+    setTimeout(() => {
+        element1 = document.getElementById(`${commentIndex}`);
+        console.log(element1);
+        if (commentIndex !== commentData.comments.length - 1) {
+          element2 = element1.nextElementSibling;
+        } else {
+          element2 = document.querySelector(".addComment");
+        }
+        spaceBetweenElements = element2.offsetTop - (element1.offsetTop + element1.offsetHeight)
+        document.getElementById("line").style.height = `${spaceBetweenElements - 13}px`;
+    });
 }
