@@ -89,7 +89,7 @@ const renderComments = () => {
                    <span class="count">${score}</span>
                    <i onclick="decreaseScore(${i}, this)" class="bi bi-dash"></i>
                    </div>
-                   <div data-clicked="false" onclick="reply(this, ${i}, false)" class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
+                   <div data-clicked="false" onclick="reply(this, ${i}, false, '${user.username}')" class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
                    <i class="bi bi-reply-fill"></i>
                    <p>Reply</p>
                    </div>
@@ -149,6 +149,11 @@ const renderReplies = (data, commentIndex) => {
     data.forEach((reply, i) => {
       const { content, createdAt, replyingTo, score, user } = reply;
 
+      const isDate = (value) => {
+        const date = new Date(value);
+        return date.getTime() === date.getTime(); // Check if getTime() returns a valid timestamp
+      }
+
         if (user.username !== currentUser.username) {
             html += /*html*/ `
             <section class="replySection">
@@ -157,14 +162,14 @@ const renderReplies = (data, commentIndex) => {
                     ${
                       i === 0
                         ? /*html*/ `
-                    <span id="line" class="block absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+                    <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
                     `
                         : ""
                     }
                     <div class="replyCard__header flex items-center gap-x-4 pb-4">
                         <img class="w-10" src="${user.image.webp}" alt="">
                         <p class="username font-semibold">${user.username}</p>
-                        <p class="postedAt font-medium">${createdAt}</p>
+                        <p class="postedAt font-medium">${isDate(createdAt) ? formatDate(createdAt) : createdAt}</p>
                     </div>
                     <p class="replyCard__comment">
                      <span class="replyTo font-bold pr-1">@${replyingTo}</span>${content}
@@ -175,7 +180,7 @@ const renderReplies = (data, commentIndex) => {
                             <span class="count">${score}</span>
                             <i onclick="decreaseReplyScore(${i}, '${commentIndex}', this)" class="bi bi-dash"></i>
                         </div>
-                    <div data-clicked="false" onclick="reply(this, ${commentIndex}, true)" class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
+                    <div data-clicked="false" onclick="reply(this, ${commentIndex}, true, '${user.username}')" class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
                         <i class="bi bi-reply-fill"></i>
                         <p>Reply</p>
                     </div>
@@ -190,7 +195,7 @@ const renderReplies = (data, commentIndex) => {
             ${
                 i === 0
                   ? /*html*/ `
-              <span id="line" class="block absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+              <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
               `
                   : ""
               }
@@ -230,20 +235,26 @@ const renderReplies = (data, commentIndex) => {
 };
 
 
-const getSpaceBetweenElements = (commentIndex, minusValue = 13) => {
+let heights = []
+const getSpaceBetweenElements = (commentIndex, minusValue = 10) => {
     let element1;
     let element2;
     let spaceBetweenElements;
 
     setTimeout(() => {
+        const lines = Array.from(document.querySelectorAll('.line'))
         element1 = document.getElementById(`${commentIndex}`);
         if (commentIndex !== commentData.comments.length - 1) {
-          element2 = element1.nextElementSibling;
+          element2 = element1.parentElement.nextElementSibling
         } else {
           element2 = document.querySelector(".addComment");
         }
         spaceBetweenElements = element2.offsetTop - (element1.offsetTop + element1.offsetHeight)
-        document.getElementById("line").style.height = `${spaceBetweenElements - minusValue}px`;
+        heights.push(spaceBetweenElements)
+        console.log(heights)
+        for (let i = 0; i < heights.length; i++) {
+          lines[i].style.height = `${heights[i] - minusValue}px`;
+        }
     });
 }
 
@@ -283,7 +294,7 @@ const decreaseReplyScore = (replyIndex, commentIndex, element) => {
 window.addEventListener('resize', () => {
   commentData.comments.forEach((comment, i) => {
     const { replies } = comment
-
+    heights = []
     if (replies.length > 0) {
       getSpaceBetweenElements(i, 45)
     }
@@ -291,15 +302,15 @@ window.addEventListener('resize', () => {
 })
 
 
-const reply = (element, commentIndex, isOnReply) => {
+const reply = (element, commentIndex, isOnReply, replyingTo) => {
     let commentCard;
 
-    let html = `
+    let html = /*html*/ `
     <div class="addCommentCard bg-white px-5 lg:pr-4 rounded-xl flex flex-col lg:justify-end lg:flex-row gap-x-5 relative lg:pb-6 lg:pt-4 w-[95%] ml-auto lg:w-[88%] mt-5">
-        <textarea name="comment" id="comment" cols="30" rows="2" class="w-full p-4 mt-5 lg:mt-4 rounded-lg lg:w-[70%]" placeholder="Add a comment..."></textarea>
+        <textarea name="comment" id="${isOnReply ? 'replyInput' : 'replyToCommentInput'}" cols="30" rows="3" class="textArea w-full px-4 py-1 mt-5 lg:mt-4 rounded-lg lg:w-[70%]" placeholder="Add a comment...">@${replyingTo + ''} </textarea>
         <div class="footer flex justify-between items-center lg:block py-3">
         <img class="w-10 lg:absolute left-5 top-8" src="./images/avatars/image-maxblagun.png" alt="">
-        <button type="button" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium">REPLY</button>
+        <button onclick="preRenderReply(this, '${replyingTo}', ${isOnReply})" type="button" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium">REPLY</button>
         </div>
     </div>
     `
@@ -314,10 +325,72 @@ const reply = (element, commentIndex, isOnReply) => {
    const replyBtnClicked = element.getAttribute("data-clicked");
 
   if (replyBtnClicked == 'false') {
-     console.log(replyBtnClicked)
      lastChild.insertAdjacentHTML("afterend", html);
      getSpaceBetweenElements(commentIndex, 45)
+     const textArea = document.getElementById(`${isOnReply? 'replyInput' : 'replyToCommentInput'}`)
+     textArea.focus();
+     textArea.selectionStart = replyingTo.length + 2;
+     textArea.selectionEnd = replyingTo.length + 2;
    }
 
    element.setAttribute("data-clicked", "true");
+}
+
+
+const formatDate = (date, locale = navigator.language) => {
+  const calcDaysPassed = (date1, date2) => Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24))
+
+  const daysPassed = calcDaysPassed(new Date(), date)
+
+  switch (daysPassed) {
+    case 0:
+      return 'Today';
+    case 1:
+      return 'Yesterday';
+    case daysPassed <= 7:
+      return '1 week ago';
+    case daysPassed <= 14:
+      return '2 weeks ago';
+    case daysPassed <= 21:
+      return '3 weeks ago';
+    case daysPassed <= 30:
+      return '1 month ago';
+    case daysPassed <= 60:
+      return '2 months ago';
+    case daysPassed <= 90:
+      return '3 months ago';
+    default:
+      return new Intl.DateTimeFormat(locale).format(date)
+  }
+}
+
+const preRenderReply = (element, replyingTo, isOnReply) => {
+  let inputValue = element.parentElement.previousElementSibling.value.trim()
+  inputValue = inputValue.replace(`@${replyingTo}`, "");
+
+  let commentToInsertIn
+  console.log(isOnReply)
+  if (!isOnReply) {
+   commentToInsertIn = commentData.comments.find(comment => comment.user.username === replyingTo)
+  } else {
+    commentToInsertIn = commentData.comments.find(comment => comment.replies.find(reply => reply.replyingTo == replyingTo))
+  }
+
+  commentToInsertIn.replies.push({
+    content: inputValue,
+    createdAt: formatDate(new Date()),
+    score: 0,
+    replyingTo: replyingTo,
+    user: {
+      image: {
+        png: "./images/avatars/image-juliusomo.png",
+        webp: "./images/avatars/image-juliusomo.webp",
+      },
+      username: "juliusomo",
+    },
+  });
+
+  heights = []
+  updatelocalstorage()
+  renderComments()
 }
