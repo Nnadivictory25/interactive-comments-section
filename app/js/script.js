@@ -32,13 +32,13 @@ let commentData = JSON.parse(localStorage.getItem("commentData")) || [];
 let currentUser = {};
 
 const updatelocalstorage = () => {
-    localStorage.setItem("commentData", JSON.stringify(commentData));
-    commentData = JSON.parse(localStorage.getItem("commentData"))
+  localStorage.setItem("commentData", JSON.stringify(commentData));
+  commentData = JSON.parse(localStorage.getItem("commentData"))
 }
 
 const setCurrentUser = () => {
   currentUser = commentData.currentUser;
-    userImgEl.src = currentUser.image.webp;
+  userImgEl.src = currentUser.image.webp;
 };
 
 if (commentData.length === 0) {
@@ -251,7 +251,6 @@ const getSpaceBetweenElements = (commentIndex, minusValue = 10) => {
         }
         spaceBetweenElements = element2.offsetTop - (element1.offsetTop + element1.offsetHeight)
         heights.push(spaceBetweenElements)
-        console.log(heights)
         for (let i = 0; i < heights.length; i++) {
           lines[i].style.height = `${heights[i] - minusValue}px`;
         }
@@ -309,7 +308,7 @@ const reply = (element, commentIndex, isOnReply, replyingTo) => {
     <div class="addCommentCard bg-white px-5 lg:pr-4 rounded-xl flex flex-col lg:justify-end lg:flex-row gap-x-5 relative lg:pb-6 lg:pt-4 w-[95%] ml-auto lg:w-[88%] mt-5">
         <textarea name="comment" id="${isOnReply ? 'replyInput' : 'replyToCommentInput'}" cols="30" rows="3" class="textArea w-full px-4 py-1 mt-5 lg:mt-4 rounded-lg lg:w-[70%]" placeholder="Add a comment...">@${replyingTo + ''} </textarea>
         <div class="footer flex justify-between items-center lg:block py-3">
-        <img class="w-10 lg:absolute left-5 top-8" src="./images/avatars/image-maxblagun.png" alt="">
+        <img class="w-10 lg:absolute left-5 top-8" src="${currentUser.image.webp}" alt="">
         <button onclick="preRenderReply(this, '${replyingTo}', ${isOnReply})" type="button" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium">REPLY</button>
         </div>
     </div>
