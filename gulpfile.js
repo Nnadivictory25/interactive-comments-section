@@ -23,9 +23,29 @@ function scssTask() {
     .pipe(dest('dist', { sourcemaps: '.' }));
 }
 
+function scssTaskDev() {
+  const tailwindcss = require('tailwindcss');
+  return src('app/scss/style.scss', { sourcemaps: true })
+  .pipe(postcss([
+    tailwindcss('tailwind.config.js'),
+    require('autoprefixer'),
+  ]))
+    .pipe(sass())
+    .pipe(postcss([autoprefixer(), cssnano()]))
+    .pipe(dest('dist', { sourcemaps: '.' }));
+}
+
 // JavaScript Task
 function jsTask() {
   return src('app/js/script.js', { sourcemaps: false })
+    .pipe(babel({ presets: ['@babel/preset-env'] }))
+    .pipe(terser())
+    .pipe(dest('dist', { sourcemaps: '.' }));
+}
+
+// JavaScript Task Dev
+function jsTaskDev() {
+  return src('app/js/script.js', { sourcemaps: true })
     .pipe(babel({ presets: ['@babel/preset-env'] }))
     .pipe(terser())
     .pipe(dest('dist', { sourcemaps: '.' }));
@@ -61,7 +81,7 @@ function watchTask() {
 }
 
 // Default Gulp Task
-exports.default = series(scssTask, jsTask, browserSyncServe, watchTask);
+exports.default = series(scssTaskDev, jsTaskDev, browserSyncServe, watchTask);
 
 // Build Gulp Task
 exports.build = series(scssTask, jsTask);
