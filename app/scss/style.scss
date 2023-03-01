@@ -4,3 +4,13 @@
 @tailwind base; 
 @tailwind components;
 @tailwind utilities;  
+
+@layer components {
+    .bg-grey {
+        @apply bg-[hsl(223,19%,93%)];
+    }
+
+    .bg-blue {
+        @apply bg-[hsl(238,40%,52%)];
+    }
+} 

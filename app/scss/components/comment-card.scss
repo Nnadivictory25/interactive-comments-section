@@ -10,6 +10,11 @@
     .commentSection {
         width: 100%;
         margin-top: 1.5rem;
+        outline: 1px solid purple;
+
+        &>div, section {
+            outline: 1px solid blue;
+        }
 
         &:first-child {
             margin-top: 2.5rem;

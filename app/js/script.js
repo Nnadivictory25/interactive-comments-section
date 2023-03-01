@@ -61,17 +61,18 @@ if (commentData.length === 0) {
   });
 }
 
+// ! RENDER COMMENTS FUNCTION
 const renderComments = () => {
   commentsCtn.innerHTML = "";
   console.log("working");
 
   commentData.comments.forEach((comment, i) => {
-    const { content, createdAt, replies, score, user } = comment;
+    const { content, createdAt, replies, score, upvoted, downvoted, user } = comment;
 
       if (user.username !== currentUser.username) {
         commentsCtn.innerHTML += /*html*/ `
         
-        <section class="commentSection">
+        <section class="commentSection overflow-hidden">
            <div id="${i}" class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4">
                <div class="commentCard__header flex items-center gap-x-4 pb-4">
                    <img class="w-10" src="${
@@ -85,9 +86,9 @@ const renderComments = () => {
                </p>
                <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
                    <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
-                   <i onclick="increaseScore(${i}, this)" class="bi bi-plus"></i>
+                   <i onclick="increaseScore(${i}, this, ${upvoted})" class="bi bi-plus"></i>
                    <span class="count">${score}</span>
-                   <i onclick="decreaseScore(${i}, this)" class="bi bi-dash"></i>
+                   <i onclick="decreaseScore(${i}, this, ${downvoted})" class="bi bi-dash"></i>
                    </div>
                    <div data-clicked="false" onclick="reply(this, ${i}, false, '${user.username}')" class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
                    <i class="bi bi-reply-fill"></i>
@@ -117,16 +118,16 @@ const renderComments = () => {
           </p>
           <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
           <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
-              <i onclick="increaseScore(${i}, this)" class="bi bi-plus"></i>
+              <i onclick="increaseScore(${i}, this, ${upvoted})" class="bi bi-plus"></i>
               <span class="count">${score}</span>
-              <i onclick="decreaseScore(${i}, this)" class="bi bi-dash"></i>
+              <i onclick="decreaseScore(${i}, this, ${downvoted})" class="bi bi-dash"></i>
           </div>
           <div class="crudBtns flex items-center gap-x-3 lg:gap-x-5 font-medium lg:absolute top-7 right-10">
               <div onclick="openModal(this)" class="delete flex items-center gap-x-1 text-red-500 cursor-pointer">
               <i class="bi bi-trash-fill"></i>
               <p>DELETE</p>
               </div>
-              <div class="edit flex items-center gap-x-1 cursor-pointer">
+              <div onclick="editComment(this, ${i}, ${score})" class="edit flex items-center gap-x-1 cursor-pointer">
               <i class="bi bi-pen-fill"></i>
               <p>EDIT</p>
               </div>
@@ -141,6 +142,13 @@ const renderComments = () => {
   });
 };
 
+// ! DATE FORMAT CHECKER
+const isDate = (value) => {
+  const date = new Date(value);
+  return date.getTime() === date.getTime(); // Check if getTime() returns a valid timestamp
+}
+
+// ! REPLY RENDERING FUNCTION 
 const renderReplies = (data, commentIndex) => {
 
   let html = "";
@@ -148,12 +156,8 @@ const renderReplies = (data, commentIndex) => {
     getSpaceBetweenElements(commentIndex)
 
     data.forEach((reply, i) => {
-      const { content, createdAt, replyingTo, score, user } = reply;
+      const { content, createdAt, replyingTo, score, upvoted, downvoted, user } = reply;
 
-      const isDate = (value) => {
-        const date = new Date(value);
-        return date.getTime() === date.getTime(); // Check if getTime() returns a valid timestamp
-      }
 
         if (user.username !== currentUser.username) {
             html += /*html*/ `
@@ -177,9 +181,9 @@ const renderReplies = (data, commentIndex) => {
                     </p>
                     <div class="replyCard__footer flex items-center justify-between mt-5 lg:block">
                         <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
-                            <i onclick="increaseReplyScore(${i}, '${commentIndex}', this)" class="bi bi-plus"></i>
+                            <i onclick="increaseReplyScore(${i}, '${commentIndex}', this, ${upvoted})" class="bi bi-plus"></i>
                             <span class="count">${score}</span>
-                            <i onclick="decreaseReplyScore(${i}, '${commentIndex}', this)" class="bi bi-dash"></i>
+                            <i onclick="decreaseReplyScore(${i}, '${commentIndex}', this, ${downvoted})" class="bi bi-dash"></i>
                         </div>
                     <div data-clicked="false" onclick="reply(this, ${commentIndex}, true, '${user.username}')" class="replyBtn flex items-center gap-x-1 font-medium lg:absolute top-7 right-10 cursor-pointer">
                         <i class="bi bi-reply-fill"></i>
@@ -211,16 +215,16 @@ const renderReplies = (data, commentIndex) => {
                 </p>
                 <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
                 <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
-                    <i onclick="increaseReplyScore(${i}, '${commentIndex}', this)" class="bi bi-plus"></i>
+                    <i onclick="increaseReplyScore(${i}, '${commentIndex}', this, ${upvoted})" class="bi bi-plus"></i>
                     <span class="count">${score}</span>
-                    <i  onclick="decreaseReplyScore(${i}, '${commentIndex}', this)" class="bi bi-dash"></i>
+                    <i  onclick="decreaseReplyScore(${i}, '${commentIndex}', this, ${downvoted})" class="bi bi-dash"></i>
                 </div>
                 <div class="crudBtns flex items-center gap-x-3 lg:gap-x-5 font-medium lg:absolute top-7 right-10">
                     <div onclick="openModal(this)" class="delete flex items-center gap-x-1 text-red-500 cursor-pointer">
                         <i class="bi bi-trash-fill"></i>
                         <p>DELETE</p>
                     </div>
-                    <div onclick="edit(this)" class="edit flex items-center gap-x-1 cursor-pointer">
+                    <div onclick="editReply(this, ${commentIndex}, ${i}, ${score})" class="edit flex items-center gap-x-1 cursor-pointer">
                         <i class="bi bi-pen-fill"></i>
                         <p>EDIT</p>
                     </div>
@@ -237,7 +241,7 @@ const renderReplies = (data, commentIndex) => {
 
 
 let heights = []
-const getSpaceBetweenElements = (commentIndex, minusValue = 13) => {
+const getSpaceBetweenElements = (commentIndex) => {
     let element1;
     let element2;
     let spaceBetweenElements;
@@ -252,58 +256,80 @@ const getSpaceBetweenElements = (commentIndex, minusValue = 13) => {
         }
         spaceBetweenElements = element2.offsetTop - (element1.offsetTop + element1.offsetHeight)
         heights.push(spaceBetweenElements)
+        console.log(heights)
         for (let i = 0; i < heights.length; i++) {
-          lines[i].style.height = `${heights[i] - minusValue}px`;
+          lines[i].style.height = `${heights[i]}px`;
         }
     });
 }
 
 
 
-const increaseScore = (commentIndex, element) => {
+const increaseScore = (commentIndex, element, upvoted) => {
     const comment = commentData.comments.find(comment => comment.id === commentIndex + 1)
-    comment.score++;
+    comment.upvoted = true;
+    !upvoted && comment.score++
+    comment.downvoted = false;
     element.nextElementSibling.textContent = comment.score;
-    updatelocalstorage();
+    updatelocalstorage()
+    heights = []
+    !upvoted && renderComments()
 }
 
 
-const decreaseScore = (commentIndex, element) => {
+const decreaseScore = (commentIndex, element, downvoted) => {
     const comment = commentData.comments.find(comment => comment.id === commentIndex + 1)
-    comment.score > 0 && comment.score--;
+    comment.downvoted = true;
+    if (!downvoted && comment.score > 0) {
+      comment.score--
+    }
+    comment.upvoted = false; 
     element.previousElementSibling.textContent = comment.score;
     updatelocalstorage();
+    heights = []
+    !downvoted && renderComments()
 }
 
-const increaseReplyScore = (replyIndex, commentIndex, element) => {
+const increaseReplyScore = (replyIndex, commentIndex, element, upvoted) => {
     const thisReplies = commentData.comments[commentIndex].replies;
     const reply = thisReplies.find(reply => thisReplies.indexOf(reply) === replyIndex)
-    reply.score++;
+    reply.upvoted = true
+    !upvoted && reply.score++;
+    reply.downvoted = false
     element.nextElementSibling.textContent = reply.score;
     updatelocalstorage()
+    heights = []
+    !upvoted && renderComments()
 }
 
-const decreaseReplyScore = (replyIndex, commentIndex, element) => {
+const decreaseReplyScore = (replyIndex, commentIndex, element, downvoted) => {
     const thisReplies = commentData.comments[commentIndex].replies;
     const reply = thisReplies.find(reply => thisReplies.indexOf(reply) === replyIndex)
-    reply.score > 0 && reply.score--;
+    reply.downvoted = true
+    if (!downvoted && reply.score > 0) {
+      reply.score--
+    }
+    reply.upvoted = false;
     element.previousElementSibling.textContent = reply.score;
     updatelocalstorage()
+    heights = []
+    !downvoted && renderComments()
 }
 
 window.addEventListener('resize', () => {
+  heights = []
   commentData.comments.forEach((comment, i) => {
     const { replies } = comment
-    heights = []
     if (replies.length > 0) {
-      getSpaceBetweenElements(i, 45)
+      getSpaceBetweenElements(i)
     }
   })
 })
 
 
 const reply = (element, commentIndex, isOnReply, replyingTo) => {
-    let commentCard;
+  let commentCard;
+  heights = []
 
     let html = /*html*/ `
     <div class="addCommentCard bg-white px-5 lg:pr-4 rounded-xl flex flex-col lg:justify-end lg:flex-row gap-x-5 relative lg:pb-6 lg:pt-4 w-[95%] ml-auto lg:w-[88%] mt-5">
@@ -326,7 +352,12 @@ const reply = (element, commentIndex, isOnReply, replyingTo) => {
 
   if (replyBtnClicked == 'false') {
      lastChild.insertAdjacentHTML("afterend", html);
-     getSpaceBetweenElements(commentIndex, 45)
+     commentData.comments.forEach((comment, i) => {
+      const { replies } = comment
+      if (replies.length > 0) {
+        getSpaceBetweenElements(i)
+      }
+    })
      const textArea = document.getElementById(`${isOnReply? 'replyInput' : 'replyToCommentInput'}`)
      textArea.focus();
      textArea.selectionStart = replyingTo.length + 2;
@@ -393,11 +424,59 @@ const preRenderReply = (element, replyingTo, isOnReply) => {
   heights = []
   updatelocalstorage()
   renderComments()
-  
+
   commentData.comments.forEach((comment, i) => {
     const { replies } = comment
     if (replies.length > 0) {
-      getSpaceBetweenElements(i, 45)
+      getSpaceBetweenElements(i)
     }
   })
+}
+
+
+const editReply = (element, commentIndex, replyIndex, score) => {
+  const comment = commentData.comments.find(comment => comment.id === commentIndex + 1)
+  const thisReplies = comment.replies
+  const reply = thisReplies.find(reply => thisReplies.indexOf(reply) === replyIndex)
+  const inputValue = element.parentElement.parentElement.previousElementSibling.textContent.trim()
+  const commentCard = element.closest(".commentCard")
+  const commentSection = element.closest(".commentSection")
+  
+  let html = /*html*/ `
+  <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
+    <div class="commentCard__header flex items-center gap-x-4 pb-4">
+    <img class="w-10" src="${currentUser.image.webp}" alt="user profile avatar">
+      <p class="username font-semibold">juliosumo</p>
+      <p class="you text-white px-2 ml-[-10px] text-sm bg-blue">you</p>
+      <p class="postedAt font-medium">2 days ago</p>
+      </div>
+    <textarea name="comment" id="update" cols="30" rows="4" class="w-full px-4 py-2 mt-4 lg:mt-2 rounded-lg mb-3 lg:mb-0">${inputValue}</textarea>
+    <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
+      <div class="score bg-grey flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
+        <i class="bi bi-plus"></i>
+        <span class="count">${score}</span>
+        <i class="bi bi-dash"></i>
+      </div>
+        <div class="updateBtn lg:text-right">
+          <button onclick="updateReply(this)" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium">UPDATE</button>
+        </div>
+      </div>
+    </div>
+ </div>
+  `
+  
+  heights = []
+  commentCard.remove()
+  commentSection.insertAdjacentHTML("beforeend", html)
+  commentData.comments.forEach((comment, i) => {
+    const { replies } = comment
+    if (replies.length > 0) {
+      getSpaceBetweenElements(i)
+    }
+  })
+
+  const textArea = document.getElementById("update")
+  textArea.focus();
+  textArea.selectionStart = inputValue.length + 1;
+  textArea.selectionEnd = inputValue.length + 1;
 }

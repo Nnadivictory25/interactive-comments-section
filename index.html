@@ -131,23 +131,15 @@
           <p class="you text-white px-2 ml-[-10px] text-sm">you</p>
           <p class="postedAt font-medium">2 days ago</p>
         </div>
-        <p class="commentCard__comment">
-          Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.
-        </p>
+        <textarea name="comment" id="comment" cols="30" rows="3" class="w-full p-4 mt-5 lg:mt-4 rounded-lg mb-3 lg:mb-0" placeholder="Add a comment..."></textarea>
         <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
           <div class="score flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
             <i class="bi bi-plus"></i>
             <span class="count">12</span>
             <i class="bi bi-dash"></i>
           </div>
-          <div class="crudBtns flex items-center gap-x-3 lg:gap-x-5 font-medium lg:absolute top-7 right-10">
-            <div onclick="openModal()" class="delete flex items-center gap-x-1 text-red-500 cursor-pointer">
-              <i class="bi bi-trash-fill"></i>
-              <p>DELETE</p>
-            </div>
-            <div class="edit flex items-center gap-x-1 cursor-pointer">
-              <i class="bi bi-pen-fill"></i>
-              <p>EDIT</p>
+            <div class="updateBtn lg:text-right">
+              <button class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium">UPDATE</button>
             </div>
           </div>
         </div>
@@ -159,7 +151,7 @@
 
   <section class="addComment mt-5 mb-5">
     <div class="addCommentCard bg-white px-5 lg:pr-4 rounded-xl flex flex-col lg:justify-end lg:flex-row gap-x-5 relative lg:pb-6 lg:pt-4">
-      <textarea name="comment" id="comment" cols="30" rows="2" class="w-full p-4 mt-5 lg:mt-4 rounded-lg lg:w-[75%] mb-3 lg:mb-0" placeholder="Add a comment..."></textarea>
+      <textarea name="comment" id="comment" cols="30" rows="3" class="w-full px-4 py-2 mt-5 lg:mt-4 rounded-lg lg:w-[75%] mb-3 lg:mb-0" placeholder="Add a comment..."></textarea>
       <div class="footer flex justify-between items-center lg:block py-3">
         <img id="currentUserImg" class="w-10 lg:absolute left-5 top-8"  alt="profile image avatar">
         <button type="button" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium">SEND</button>
