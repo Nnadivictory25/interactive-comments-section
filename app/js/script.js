@@ -145,7 +145,8 @@ const renderReplies = (data, commentIndex) => {
 
   let html = "";
   if (data.length > 0) {
-    getSpaceBetweenElements(commentIndex);
+    getSpaceBetweenElements(commentIndex)
+
     data.forEach((reply, i) => {
       const { content, createdAt, replyingTo, score, user } = reply;
 
@@ -236,7 +237,7 @@ const renderReplies = (data, commentIndex) => {
 
 
 let heights = []
-const getSpaceBetweenElements = (commentIndex, minusValue = 10) => {
+const getSpaceBetweenElements = (commentIndex, minusValue = 13) => {
     let element1;
     let element2;
     let spaceBetweenElements;
@@ -392,4 +393,11 @@ const preRenderReply = (element, replyingTo, isOnReply) => {
   heights = []
   updatelocalstorage()
   renderComments()
+  
+  commentData.comments.forEach((comment, i) => {
+    const { replies } = comment
+    if (replies.length > 0) {
+      getSpaceBetweenElements(i, 45)
+    }
+  })
 }
