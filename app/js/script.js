@@ -109,6 +109,7 @@ const renderComments = () => {
    
         `;
       } else {
+          const id = i + 1;
           commentsCtn.innerHTML += /*html*/ `
           <section class="commentSection">
           
@@ -129,7 +130,7 @@ const renderComments = () => {
               <i onclick="decreaseScore(${i}, this, ${downvoted})" class="bi bi-dash"></i>
           </div>
           <div class="crudBtns flex items-center gap-x-3 lg:gap-x-5 font-medium lg:absolute top-7 right-10">
-              <div onclick="openModal(this)" class="delete flex items-center gap-x-1 text-red-500 cursor-pointer">
+              <div onclick="DELETE(this, ${i}, false, ${id})" class="delete flex items-center gap-x-1 text-red-500 cursor-pointer">
               <i class="bi bi-trash-fill"></i>
               <p>DELETE</p>
               </div>
@@ -232,7 +233,7 @@ const renderReplies = (data, commentIndex) => {
                     <i  onclick="decreaseReplyScore(${i}, '${commentIndex}', this, ${downvoted})" class="bi bi-dash"></i>
                 </div>
                 <div class="crudBtns flex items-center gap-x-3 lg:gap-x-5 font-medium lg:absolute top-7 right-10">
-                    <div onclick="deleteReply(this, ${commentIndex}, ${i}, '${id}')" class="delete flex items-center gap-x-1 text-red-500 cursor-pointer">
+                    <div onclick="DELETE(this, ${commentIndex}, ${i}, '${id}')" class="delete flex items-center gap-x-1 text-red-500 cursor-pointer">
                         <i class="bi bi-trash-fill"></i>
                         <p>DELETE</p>
                     </div>
@@ -576,12 +577,12 @@ const update = (element, replyingTo) => {
   renderComments()
 }
 
-const deleteReply = (element, commentIndex, replyIndex, id) => {
+const DELETE = (element, commentIndex, replyIndex, id) => {
   const comment = commentData.comments.find(comment => comment.id === commentIndex + 1)
   let thisReplies = comment.replies
   const index = thisReplies.findIndex(reply => reply.id === id);
   console.log(index)
-  if (index === -1) {
+  if (replyIndex && index === -1) {
     // reply not found
     return;
   }
@@ -591,9 +592,15 @@ const deleteReply = (element, commentIndex, replyIndex, id) => {
   const deleteBtn = document.getElementById("deleteBtn")
 
   deleteBtn.addEventListener("click", () => { 
-    element.parentElement.parentElement.parentElement.remove()
-    thisReplies.splice(index, 1)
-    console.log(commentData.comments)
+    if (index !== -1) {
+      element.parentElement.parentElement.parentElement.remove()
+      thisReplies.splice(index, 1)
+    } else {
+      const INDEX = id - 1
+      console.log(INDEX)
+      commentData.comments.splice(INDEX, 1)
+      element.parentElement.parentElement.parentElement.remove()
+    }
     setTimeout(() => {
       updatelocalstorage()
       renderComments()
@@ -629,7 +636,8 @@ const addComment = (el) => {
     },
     replies: [],
   })
-
+  
+  commentInput.value = ''
   setTimeout(() => {
     updatelocalstorage()
     renderComments()
