@@ -72,7 +72,6 @@ Users should be able to:
 
 I learnt alot of things here, from learnign how to calculate space between elements to controlling the cursor and positioning it in the textarea. A whole lot more tho.
 
-To see how you can add code snippets, see below:
 
 
 ```js
