@@ -69,7 +69,6 @@ if (commentData.length === 0) {
 
 // ! RENDER COMMENTS FUNCTION
 const renderComments = () => {
-  console.log("renderComments function called");
 
   commentsCtn.innerHTML = "";
 
@@ -113,12 +112,12 @@ const renderComments = () => {
           commentsCtn.innerHTML += /*html*/ `
           <section class="commentSection">
           
-          <div id="${i}" class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
+          <div id="${i}" class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto">
               <div class="commentCard__header flex items-center gap-x-4 pb-4">
                   <img class="w-10" src="${user.image.webp}" alt="user profile avatar">
                   <p class="username font-semibold">${user.username}</p>
                   <p class="you text-white px-2 ml-[-10px] text-sm">you</p>
-                  <p class="postedAt font-medium">${createdAt}</p>
+                  <p class="postedAt font-medium">${isDate(createdAt) ? formatDate(createdAt) : createdAt}</p>
               </div>
           <p class="commentCard__comment">
             ${content}
@@ -134,7 +133,7 @@ const renderComments = () => {
               <i class="bi bi-trash-fill"></i>
               <p>DELETE</p>
               </div>
-              <div onclick="editComment(this, ${i}, ${score})" class="edit flex items-center gap-x-1 cursor-pointer">
+              <div onclick="edit(this, ${i}, ${score}, false)" class="edit flex items-center gap-x-1 cursor-pointer">
               <i class="bi bi-pen-fill"></i>
               <p>EDIT</p>
               </div>
@@ -166,7 +165,6 @@ const isDate = (value) => {
 
 // ! REPLY RENDERING FUNCTION 
 const renderReplies = (data, commentIndex) => {
-  console.log("render replies function called");
   let html = "";
   if (data.length > 0) {
 
@@ -238,7 +236,7 @@ const renderReplies = (data, commentIndex) => {
                         <i class="bi bi-trash-fill"></i>
                         <p>DELETE</p>
                     </div>
-                    <div onclick="editReply(this, ${commentIndex}, ${i}, ${score}, '${isDate(createdAt) ? formatDate(createdAt) : createdAt}', '${replyingTo}')" class="edit flex items-center gap-x-1 cursor-pointer">
+                    <div onclick="edit(this, ${commentIndex}, ${i}, ${score}, '${isDate(createdAt) ? formatDate(createdAt) : createdAt}', '${replyingTo}', true)" class="edit flex items-center gap-x-1 cursor-pointer">
                         <i class="bi bi-pen-fill"></i>
                         <p>EDIT</p>
                     </div>
@@ -256,7 +254,6 @@ const renderReplies = (data, commentIndex) => {
 
 
 const getSpaceBetweenElements = (commentIndex) => {
-    console.log("getSpaceBetweenElements function called");
     let element1;
     let element2;
     let spaceBetweenElements;
@@ -269,7 +266,6 @@ const getSpaceBetweenElements = (commentIndex) => {
             length--
           }
         })
-        console.log(length)
         const lines = Array.from(document.querySelectorAll('.line'))
         element1 = document.getElementById(`${commentIndex}`);
         if (commentIndex !== commentData.comments.length - 1) {
@@ -464,7 +460,7 @@ const preRenderReply = (element, replyingTo, isOnReply) => {
 let replyToUpdate;
 let inputValue;
 
-const editReply = (element, commentIndex, replyIndex, score, createdAt, replyingTo) => {
+const edit = (element, commentIndex, replyIndex, score, createdAt, replyingTo, isReply) => {
   const comment = commentData.comments.find(comment => comment.id === commentIndex + 1)
   const thisReplies = comment.replies
   const reply = thisReplies.find(reply => thisReplies.indexOf(reply) === replyIndex)
@@ -472,36 +468,69 @@ const editReply = (element, commentIndex, replyIndex, score, createdAt, replying
   inputValue = element.parentElement.parentElement.previousElementSibling.textContent.trim().replace(`@${replyingTo}`, "")
   const commentCard = element.closest(".commentCard")
   const commentSection = element.closest(".commentSection")
+  let html;
 
-  let html = /*html*/ `
-  <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
-    ${
-      replyIndex === 0
-        ? /*html*/ `
-    <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
-    `
-        : ""
-    }
-    <div class="commentCard__header flex items-center gap-x-4 pb-4">
-    <img class="w-10" src="${currentUser.image.webp}" alt="user profile avatar">
-      <p class="username font-semibold">juliosumo</p>
-      <p class="you text-white px-2 ml-[-10px] text-sm bg-blue">you</p>
-      <p class="postedAt font-medium">${createdAt}</p>
-      </div>
-    <textarea oninput="validateInput(this)" name="comment" id="update" cols="30" rows="4" class="w-full px-4 py-2 rounded-lg mb-3 lg:mb-0">@${replyingTo} ${inputValue}</textarea>
-    <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
-      <div class="score bg-grey flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
-        <i class="bi bi-plus"></i>
-        <span class="count">${score}</span>
-        <i class="bi bi-dash"></i> 
-      </div>
-        <div class="updateBtn lg:text-right">
-          <button disabled onclick="updateReply(this, '${replyingTo}')" id="updateBtn" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium disabled:opacity-30 disabled:pointer-events-none">UPDATE</button>
+  if (isReply) {
+    
+    html = /*html*/ `
+    <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
+      ${
+        replyIndex === 0
+          ? /*html*/ `
+      <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+      `
+          : ""
+      }
+      <div class="commentCard__header flex items-center gap-x-4 pb-4">
+      <img class="w-10" src="${currentUser.image.webp}" alt="user profile avatar">
+        <p class="username font-semibold">juliosumo</p>
+        <p class="you text-white px-2 ml-[-10px] text-sm bg-blue">you</p>
+        <p class="postedAt font-medium">${createdAt}</p>
+        </div>
+      <textarea oninput="validateInput(this)" name="comment" id="update" cols="30" rows="4" class="w-full px-4 py-2 rounded-lg mb-3 lg:mb-0">@${replyingTo} ${inputValue}</textarea>
+      <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
+        <div class="score bg-grey flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
+          <i class="bi bi-plus"></i>
+          <span class="count">${score}</span>
+          <i class="bi bi-dash"></i> 
+        </div>
+          <div class="updateBtn lg:text-right">
+            <button disabled onclick="update(this, '${replyingTo}')" id="updateBtn" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium disabled:opacity-30 disabled:pointer-events-none">UPDATE</button>
+          </div>
         </div>
       </div>
-    </div>
- </div>
-  `
+   </div>
+    `
+
+  } else {
+    let commentCreatedAt = comment.createdAt
+    let commentScore = comment.score
+    let id = comment.id
+    
+    html = /*html*/ `
+    <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto">
+
+      <div class="commentCard__header flex items-center gap-x-4 pb-4">
+      <img class="w-10" src="${currentUser.image.webp}" alt="user profile avatar">
+        <p class="username font-semibold">juliosumo</p>
+        <p class="you text-white px-2 ml-[-10px] text-sm bg-blue">you</p>
+        <p class="postedAt font-medium">${commentCreatedAt}</p>
+        </div>
+      <textarea oninput="validateInput(this)" name="comment" id="update" cols="30" rows="4" class="w-full px-4 py-2 rounded-lg mb-3 lg:mb-0"> ${inputValue}</textarea>
+      <div class="commentCard__footer flex items-center justify-between mt-5 lg:block">
+        <div class="score bg-grey flex items-center gap-x-3 font-medium rounded-lg px-4 py-2 lg:absolute left-7 lg:flex-col top-5 lg:py-4 lg:px-3">
+          <i class="bi bi-plus"></i>
+          <span class="count">${commentScore}</span>
+          <i class="bi bi-dash"></i> 
+        </div>
+          <div class="updateBtn lg:text-right">
+            <button data-commentId="${id}" disabled onclick="update(this, false)" id="updateBtn" class="px-7 py-3 lg:py-2 lg:mt-1 text-white rounded-lg font-medium disabled:opacity-30 disabled:pointer-events-none">UPDATE</button>
+          </div>
+        </div>
+      </div>
+   </div>
+    `
+  }
   
   heights = []
   commentCard.remove()
@@ -528,11 +557,21 @@ const validateInput = (input) => {
   }
 } 
 
-const updateReply = (element, replyingTo) => {
+const update = (element, replyingTo) => {
+  let inputValue;
   heights = []
-  const inputValue = element.parentElement.parentElement.previousElementSibling.value.trim().replace(`@${replyingTo}`, "")
-  replyToUpdate.content = inputValue
-  replyToUpdate.createdAt = formatDate(new Date())
+  if (replyingTo !== false) {
+    inputValue  = element.parentElement.parentElement.previousElementSibling.value.trim().replace(`@${replyingTo}`, "")
+    replyToUpdate.content = inputValue
+    replyToUpdate.createdAt = formatDate(new Date())
+  } else {
+    inputValue = element.parentElement.parentElement.previousElementSibling.value.trim()
+    const id = +element.getAttribute("data-commentId")
+    const comment = commentData.comments.find(comment => comment.id === id)
+    
+    comment.content = inputValue
+    comment.createdAt = formatDate(new Date())
+  }
   updatelocalstorage()
   renderComments()
 }
@@ -563,4 +602,37 @@ const deleteReply = (element, commentIndex, replyIndex, id) => {
   })
 }
 
+// ! ADDING COMMENT
+const commentInput = document.querySelector('.addCommentInput')
 
+const addComment = (el) => {
+  const inputValue = commentInput.value.trim();
+  let length = commentData.comments.length + 1
+  
+  if (inputValue === "") {
+    return;
+  }
+  
+  commentData.comments.push({
+    id: length,
+    content: inputValue,
+    createdAt: formatDate(new Date()),
+    score: 0,
+    upvoted: false,
+    downvoted: false,
+    user: {
+      image: {
+        png: "./images/avatars/image-juliusomo.png",
+        webp: "./images/avatars/image-juliusomo.webp",
+      },
+      username: "juliusomo",
+    },
+    replies: [],
+  })
+
+  setTimeout(() => {
+    updatelocalstorage()
+    renderComments()
+  });
+  console.log(commentData.comments)
+}
