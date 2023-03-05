@@ -79,7 +79,7 @@ const renderComments = () => {
         commentsCtn.innerHTML += /*html*/ `
         
         <section class="commentSection overflow-hidden">
-           <div id="${i}" class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4">
+           <div id="${i}" class="commentCard bg-white rounded-md p-5 relative lg:pr-20 lg:pl-24 lg:pb-4">
                <div class="commentCard__header flex items-center gap-x-4 pb-4">
                    <img class="w-10" src="${
                      user.image.webp
@@ -113,7 +113,7 @@ const renderComments = () => {
           commentsCtn.innerHTML += /*html*/ `
           <section class="commentSection">
           
-          <div id="${i}" class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto">
+          <div id="${i}" class="commentCard bg-white rounded-md p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto">
               <div class="commentCard__header flex items-center gap-x-4 pb-4">
                   <img class="w-10" src="${user.image.webp}" alt="user profile avatar">
                   <p class="username font-semibold">${user.username}</p>
@@ -176,7 +176,7 @@ const renderReplies = (data, commentIndex) => {
             html += /*html*/ `
             <section class="replySection">
             
-            <div class="replyCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 w-[95%] lg:w-[88%]">
+            <div class="replyCard bg-white rounded-md p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 w-[95%] lg:w-[88%]">
                     ${
                       i === 0
                         ? /*html*/ `
@@ -209,7 +209,7 @@ const renderReplies = (data, commentIndex) => {
             `;
         } else {
             html += /*html*/ `
-            <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
+            <div class="commentCard bg-white rounded-md p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
             ${
                 i === 0
                   ? /*html*/ `
@@ -362,7 +362,7 @@ const reply = (element, commentIndex, isOnReply, replyingTo) => {
     
 
     let html = /*html*/ `
-    <div class="addCommentCard bg-white px-5 lg:pr-4 rounded-xl flex flex-col lg:justify-end lg:flex-row gap-x-5 relative lg:pb-6 lg:pt-4 w-[95%] ml-auto lg:w-[88%] mt-5">
+    <div class="addCommentCard bg-white px-5 lg:pr-4 rounded-md flex flex-col lg:justify-end lg:flex-row gap-x-5 relative lg:pb-6 lg:pt-4 w-[95%] ml-auto lg:w-[88%] mt-5">
         ${
           index === 0
             ? /*html*/ `
@@ -474,7 +474,7 @@ const edit = (element, commentIndex, replyIndex, score, createdAt, replyingTo, i
   if (isReply) {
     
     html = /*html*/ `
-    <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
+    <div class="commentCard bg-white rounded-md p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto w-[95%] lg:w-[88%]">
       ${
         replyIndex === 0
           ? /*html*/ `
@@ -509,7 +509,7 @@ const edit = (element, commentIndex, replyIndex, score, createdAt, replyingTo, i
     let id = comment.id
     
     html = /*html*/ `
-    <div class="commentCard bg-white rounded-xl p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto">
+    <div class="commentCard bg-white rounded-md p-5 relative lg:pr-20 lg:pl-24 lg:pb-4 mt-5 ml-auto">
 
       <div class="commentCard__header flex items-center gap-x-4 pb-4">
       <img class="w-10" src="${currentUser.image.webp}" alt="user profile avatar">
