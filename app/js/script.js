@@ -180,7 +180,7 @@ const renderReplies = (data, commentIndex) => {
                     ${
                       i === 0
                         ? /*html*/ `
-                    <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+                    <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-200"></span>
                     `
                         : ""
                     }
@@ -213,7 +213,7 @@ const renderReplies = (data, commentIndex) => {
             ${
                 i === 0
                   ? /*html*/ `
-              <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+              <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-200"></span>
               `
                   : ""
               }
@@ -366,7 +366,7 @@ const reply = (element, commentIndex, isOnReply, replyingTo) => {
         ${
           index === 0
             ? /*html*/ `
-        <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+        <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-200"></span>
         `
             : ""
         }
@@ -478,7 +478,7 @@ const edit = (element, commentIndex, replyIndex, score, createdAt, replyingTo, i
       ${
         replyIndex === 0
           ? /*html*/ `
-      <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-300"></span>
+      <span id="line" class="block line absolute top-0 w-[2px] left-[-.95rem] lg:left-[-3rem] bg-slate-200"></span>
       `
           : ""
       }
